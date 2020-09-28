@@ -8,18 +8,44 @@ import Scene from './core/scene'
 import Camera from './core/camera'
 import Cube from './shapes/cube'
 
+import SkyLight from './light/skyLight'
+import DirectLight from './light/directLight'
 
-// Get A WebGL context
+import MPhong from './materials/phong'
+import pic from '../assets/imgs/awesomeface.png'
+
 var canvas = document.getElementById("canvas");
 var gl = canvas.getContext("webgl2");
 window.gl = gl
 gl.enable(gl.DEPTH_TEST)
 
 const scene = new Scene()
+window.scene = scene
 
 const cam = new Camera()
 scene.setMainCamera(cam)
 
+scene.addLight(new SkyLight({
+  color: [0.2, 0.2, 0.2]
+}))
+scene.addLight(new DirectLight({
+  color: [1, 1, 1],
+  direction: [0, 1, -1]
+}))
+scene.addLight(new DirectLight({
+  color: [0, 1, 1],
+  direction: [1, 0, 0]
+}))
+
+const mat1 = new MPhong({
+  diffuse: [1, 0, 0],
+  specular: [1, 1, 1]
+})
+
+const mat2 = new MPhong({
+  diffuse: pic,
+  specular: [1, 1, 0]
+})
 
 const cubePositions = [
   [ 0.0,  0.0,  0.0],
@@ -37,6 +63,7 @@ const cubePositions = [
 cubePositions.forEach((item, i) => {
   const cube = new Cube()
 
+  cube.setMaterial(i % 2 === 0 ? mat2 : mat1)
   cube.scale([0.5, 0.5, 0.5])
   cube.rotate(angle2Radian(20 * i), [1.0, 0.3, 0.5])
   cube.translate(item)

@@ -5,7 +5,11 @@ export default class Scene {
 
     this.mainCamera = null
     this.objects = []
-    this.lights = []
+    this.lights = {
+      sky: [],
+      direct: [],
+      point: []
+    }
     
     this.isPause = false
   }
@@ -17,13 +21,10 @@ export default class Scene {
 
   addMesh(o) {
     this.objects.push(o);
-    o.scene = this
   }
 
   addLight(l) {
-    this.lights.push(l)
-    this.renderer.addLight(l)
-    l.scene = this
+    this.lights[l.type].push(l)
   }
 
   start() {
