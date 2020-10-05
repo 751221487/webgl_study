@@ -7,6 +7,7 @@ import { angle2Radian } from './utils/Math.js'
 import Scene from './core/scene'
 import Camera from './core/camera'
 import Cube from './shapes/cube'
+import Plane from './shapes/plane'
 
 import SkyLight from './light/skyLight'
 import DirectLight from './light/directLight'
@@ -47,15 +48,14 @@ const mat2 = new MPhong({
   specular: [1, 1, 0]
 })
 
+const mat3 = new MPhong({
+  diffuse: [1, 1, 1],
+  specular: [1, 1, 1]
+})
+
 const cubePositions = [
   [ 0.0,  0.0,  0.0],
-  [ 2.0,  5.0, -15.0],
-  [-1.5, -2.2, -2.5],
-  [-3.8, -2.0, -12.3],
-  [ 2.4, -0.4, -3.5],
-  [-1.7,  3.0, -7.5],
-  [ 1.3, -2.0, -2.5],
-  [ 1.5,  2.0, -2.5],
+  [-1.5, 2.2, -2.5],
   [ 1.5,  0.2, -1.5],
   [-1.3,  1.0, -1.5]
 ]
@@ -71,5 +71,10 @@ cubePositions.forEach((item, i) => {
   scene.addMesh(cube)
 })
 
+const plane = new Plane()
+plane.setMaterial(mat3)
+plane.translate([0, -1, 0])
+plane.scale([2, 2, 2])
+scene.addMesh(plane)
 
 scene.start()

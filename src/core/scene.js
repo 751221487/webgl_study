@@ -4,7 +4,7 @@ export default class Scene {
     this._time = 0
 
     this.mainCamera = null
-    this.objects = []
+    this.meshs = []
     this.lights = {
       sky: [],
       direct: [],
@@ -20,7 +20,7 @@ export default class Scene {
   }
 
   addMesh(o) {
-    this.objects.push(o);
+    this.meshs.push(o);
   }
 
   addLight(l) {
@@ -39,14 +39,14 @@ export default class Scene {
     gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT)
     this.mainCamera._update()
 
-    for(let i = 0, l = this.objects.length; i < l; i++) {
-      if(this.objects[i].canDestroy) {
-        delete this.objects[i]
-        this.objects.splice(i, 1)
+    for(let i = 0, l = this.meshs.length; i < l; i++) {
+      if(this.meshs[i].canDestroy) {
+        delete this.meshs[i]
+        this.meshs.splice(i, 1)
         i--;l--;
         continue
       }
-      this.objects[i] && this.objects[i]._update();
+      this.meshs[i] && this.meshs[i]._update();
     }
     window.requestAnimationFrame(this._loop.bind(this));
   }

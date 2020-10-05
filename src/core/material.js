@@ -5,6 +5,7 @@ export default class Material {
     this.mesh = {}
     this.images = []
     this.textureIndex = 0
+    this.vao = null
   }
 
   init() {
@@ -16,7 +17,11 @@ export default class Material {
     const gl = window.gl
     var program = createProgramFromSources(gl, [this.vertexShader, this.fragmentShader]);
     this.glProgram = program
-    gl.useProgram(program);
+    gl.useProgram(program)
+
+    this.vao = gl.createVertexArray()
+    gl.bindVertexArray(this.vao)
+
     const aPos = gl.getAttribLocation(program, "aPos")
     const aTexCoord = gl.getAttribLocation(program, "aTexCoord")
     const aNormal = gl.getAttribLocation(program, "aNormal")
@@ -40,6 +45,8 @@ export default class Material {
     gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(normal), gl.STATIC_DRAW)
     gl.enableVertexAttribArray(aNormal);
     gl.vertexAttribPointer(aNormal, 3, gl.FLOAT, false, 0, 0)
+
+    gl.bindVertexArray(null)
   }
 
   bindUniform() {
@@ -92,7 +99,8 @@ export default class Material {
     const transform = toArray(this.mesh.transform)
     const view = toArray(cam.getViewMatrix())
 
-    gl.useProgram(this.glProgram);
+    gl.bindVertexArray(this.vao)
+    gl.useProgram(this.glProgram)
     const mat4Model = gl.getUniformLocation(this.glProgram, "m_model")
     const mat4View = gl.getUniformLocation(this.glProgram, "m_view")
     const camPosition = gl.getUniformLocation(this.glProgram, "viewPos")

@@ -10,6 +10,9 @@ export default class Mesh {
     this.vertex = data.vertex
     this.normal = data.normal
     this.texCoord = data.texCoord
+    this.translation = unit(4)
+    this.rotation = unit(4)
+    this.scaling = unit(4)
     this.transform = options.transform || unit(4)
     if(typeof options.update === 'function') {
       this.update = options.update.bind(this)
@@ -23,15 +26,22 @@ export default class Mesh {
   }
 
   translate(vector) {
-    this.transform = multiple(this.transform, translate(vector))
+    this.translation = translate(vector)
+    this.updateTranslate()
   }
 
   rotate(angle, vector) {
-    this.transform = multiple(this.transform, rotation(angle, vector))
+    this.rotation = rotation(angle, vector)
+    this.updateTranslate()
   }
 
   scale(vector) {
-    this.transform = multiple(this.transform, scale(vector))
+    this.scaling = scale(vector)
+    this.updateTranslate()
+  }
+
+  updateTranslate() {
+    this.transform = multiple(multiple(this.rotation, this.scaling), this.translation)
   }
 
   setMaterial(mat) {
