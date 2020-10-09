@@ -3,24 +3,28 @@ import { toArray } from '../utils/Matrix'
 export default class Material {
   constructor() {
     this.mesh = {}
-    this.images = []
+    this.textures = []
     this.textureIndex = 0
-    this.vao = null
+    this.vao = gl.createVertexArray()
+  }
+
+  initProgram() {
+    const gl = window.gl
+    var program = createProgramFromSources(gl, [this.vertexShader, this.fragmentShader]);
+    this.glProgram = program
   }
 
   init() {
+    gl.bindVertexArray(this.vao)
+    gl.useProgram(this.glProgram)
     this.bindAttrLocation()
     this.bindUniform()
+    gl.bindVertexArray(null)
   }
 
   bindAttrLocation() {
     const gl = window.gl
-    var program = createProgramFromSources(gl, [this.vertexShader, this.fragmentShader]);
-    this.glProgram = program
-    gl.useProgram(program)
-
-    this.vao = gl.createVertexArray()
-    gl.bindVertexArray(this.vao)
+    const program = this.glProgram
 
     const aPos = gl.getAttribLocation(program, "aPos")
     const aTexCoord = gl.getAttribLocation(program, "aTexCoord")
@@ -46,7 +50,6 @@ export default class Material {
     gl.enableVertexAttribArray(aNormal);
     gl.vertexAttribPointer(aNormal, 3, gl.FLOAT, false, 0, 0)
 
-    gl.bindVertexArray(null)
   }
 
   bindUniform() {
@@ -66,29 +69,29 @@ export default class Material {
     gl.uniformMatrix4fv(mat4View, false, view)
     gl.uniformMatrix4fv(mat4Projection, false, projection)
     gl.uniform3fv(camPosition, cam.Position)
-    this.bindChildUniform()
   }
 
-  bindChildUniform() {}
-
   loadImage(src) {
-    const image = new Image();
+    const image = new Image()
     image.src = src
     const textureIndex = this.textureIndex
     this.textureIndex++
     image.onload = () => {
+      gl.useProgram(this.glProgram)
       var texture = gl.createTexture();
-      gl.activeTexture(gl['TEXTURE' + textureIndex]);
-      gl.bindTexture(gl.TEXTURE_2D, texture);
+      this.textures.push(texture)
+      gl.activeTexture(gl['TEXTURE' + textureIndex])
+      gl.bindTexture(gl.TEXTURE_2D, texture)
 
       // Set the parameters so we can render any size image.
-      gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.CLAMP_TO_EDGE);
-      gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE);
-      gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.NEAREST);
-      gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.NEAREST);
+      gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.CLAMP_TO_EDGE)
+      gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE)
+      gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.NEAREST)
+      gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.NEAREST)
 
       // Upload the image into the texture.
-      gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, image);
+      gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, image)
+      gl.generateMipmap(gl.TEXTURE_2D)
     }
     return image
   }
@@ -98,6 +101,11 @@ export default class Material {
     const cam = window.scene.mainCamera
     const transform = toArray(this.mesh.transform)
     const view = toArray(cam.getViewMatrix())
+
+    for(let i = 0; i < this.textures.length; i++) {
+      gl.activeTexture(gl['TEXTURE' + i])
+      gl.bindTexture(gl.TEXTURE_2D, this.textures[i])
+    }
 
     gl.bindVertexArray(this.vao)
     gl.useProgram(this.glProgram)

@@ -11,9 +11,11 @@ import Plane from './shapes/plane'
 
 import SkyLight from './light/skyLight'
 import DirectLight from './light/directLight'
+import PointLight from './light/pointLight'
 
 import MPhong from './materials/phong'
 import pic from '../assets/imgs/awesomeface.png'
+import woodFloor from '../assets/imgs/wood-floor.jpg'
 
 var canvas = document.getElementById("canvas");
 var gl = canvas.getContext("webgl2");
@@ -30,12 +32,17 @@ scene.addLight(new SkyLight({
   color: [0.2, 0.2, 0.2]
 }))
 scene.addLight(new DirectLight({
-  color: [1, 1, 1],
+  color: [0.2, 0.4, 0.6],
   direction: [0, 1, -1]
 }))
 scene.addLight(new DirectLight({
   color: [0, 1, 1],
   direction: [1, 0, 0]
+}))
+
+scene.addLight(new PointLight({
+  color: [1, 1, 1],
+  position: [0.5, -0.5, 0.5]
 }))
 
 const mat1 = new MPhong({
@@ -49,7 +56,7 @@ const mat2 = new MPhong({
 })
 
 const mat3 = new MPhong({
-  diffuse: [1, 1, 1],
+  diffuse: woodFloor,
   specular: [1, 1, 1]
 })
 
