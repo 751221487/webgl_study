@@ -30,13 +30,18 @@ export default class Scene {
   start() {
     this.isPause = false;
     this._loop()
+    gl.enable(gl.DEPTH_TEST)
+    gl.depthFunc(gl.LESS)
+    gl.enable(gl.STENCIL_TEST)
+    gl.stencilFunc(gl.NOTEQUAL, 1, 0xFF)
+    gl.stencilOp(gl.KEEP, gl.KEEP, gl.REPLACE)
   }
 
   _loop() {
     this._time++;
     const gl = window.gl
     gl.clearColor(0, 0, 0, 1)
-    gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT)
+    gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT | gl.STENCIL_BUFFER_BIT)
     this.mainCamera._update()
 
     for(let i = 0, l = this.meshs.length; i < l; i++) {

@@ -168,7 +168,6 @@ export default class MPhong extends Material {
       gl.uniform1f(gl.getUniformLocation(this.glProgram, `pointLights[${i}].linear`), lights.point[i].linear)
       gl.uniform1f(gl.getUniformLocation(this.glProgram, `pointLights[${i}].quadratic`), lights.point[i].quadratic)
     }
-
   }
 
 }

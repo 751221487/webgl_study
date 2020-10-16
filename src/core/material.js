@@ -96,6 +96,7 @@ export default class Material {
     return image
   }
 
+
   render() {
     const gl = window.gl
     const cam = window.scene.mainCamera
@@ -118,5 +119,6 @@ export default class Material {
     gl.uniform3fv(camPosition, cam.Position)
     // draw
     gl.drawArrays(gl.TRIANGLES, 0, this.mesh.vertex.length / 3);
+    gl.bindVertexArray(null)
   }
 }

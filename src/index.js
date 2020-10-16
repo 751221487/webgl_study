@@ -14,11 +14,12 @@ import DirectLight from './light/directLight'
 import PointLight from './light/pointLight'
 
 import MPhong from './materials/phong'
+import MHighlight from './materials/highlight'
 import pic from '../assets/imgs/awesomeface.png'
 import woodFloor from '../assets/imgs/wood-floor.jpg'
 
 var canvas = document.getElementById("canvas");
-var gl = canvas.getContext("webgl2");
+var gl = canvas.getContext("webgl2", { stencil: true });
 window.gl = gl
 gl.enable(gl.DEPTH_TEST)
 
@@ -69,6 +70,13 @@ const cubePositions = [
 
 cubePositions.forEach((item, i) => {
   const cube = new Cube()
+
+  if(i === 3) {
+    cube.setHighlight()
+    cube.update = () => {
+      cube.rotate(angle2Radian(2 * cube._time), [0, 1, 0])
+    }
+  }
 
   cube.setMaterial(i % 2 === 0 ? mat2 : mat1)
   cube.scale([0.5, 0.5, 0.5])
