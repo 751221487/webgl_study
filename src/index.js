@@ -15,6 +15,10 @@ import PointLight from './light/pointLight'
 
 import MPhong from './materials/phong'
 import MHighlight from './materials/highlight'
+
+import Inversion from './postprocess/inversion'
+import Kernel from './postprocess/kernel'
+
 import pic from '../assets/imgs/awesomeface.png'
 import woodFloor from '../assets/imgs/wood-floor.jpg'
 
@@ -45,6 +49,9 @@ scene.addLight(new PointLight({
   color: [1, 1, 1],
   position: [0.5, -0.5, 0.5]
 }))
+
+// scene.setPostProcess(new Inversion())
+// scene.setPostProcess(new Kernel())
 
 const mat1 = new MPhong({
   diffuse: [1, 0, 0],

@@ -10,6 +10,7 @@ export default class Scene {
       direct: [],
       point: []
     }
+    this.postProces = null
     
     this.isPause = false
   }
@@ -17,6 +18,10 @@ export default class Scene {
   setMainCamera(cam) {
     this.mainCamera = cam
     cam.setScene(this)
+  }
+
+  setPostProcess(postprocess) {
+    this.postprocess = postprocess
   }
 
   addMesh(o) {
@@ -29,12 +34,12 @@ export default class Scene {
 
   start() {
     this.isPause = false;
-    this._loop()
     gl.enable(gl.DEPTH_TEST)
     gl.depthFunc(gl.LESS)
     gl.enable(gl.STENCIL_TEST)
     gl.stencilFunc(gl.NOTEQUAL, 1, 0xFF)
     gl.stencilOp(gl.KEEP, gl.KEEP, gl.REPLACE)
+    this._loop()
   }
 
   _loop() {
@@ -52,6 +57,9 @@ export default class Scene {
         continue
       }
       this.meshs[i] && this.meshs[i]._update();
+    }
+    if(this.postprocess) {
+      this.postprocess.render()
     }
     window.requestAnimationFrame(this._loop.bind(this));
   }

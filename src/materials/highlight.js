@@ -29,6 +29,4 @@ export default class MHighlight extends Material {
     const gl = window.gl
     gl.uniform3fv(gl.getUniformLocation(this.glProgram, `color`), color)
   }
-
-
 }
