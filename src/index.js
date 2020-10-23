@@ -6,6 +6,7 @@ import { angle2Radian } from './utils/Math.js'
 
 import Scene from './core/scene'
 import Camera from './core/camera'
+import MeshGroup from './core/meshGroup'
 import Cube from './shapes/cube'
 import Plane from './shapes/plane'
 
@@ -59,16 +60,16 @@ scene.addLight(new PointLight({
   position: [0.5, -0.5, 0.5]
 }))
 
-scene.setSkybox(new Skybox({
-  images: [
-    skybox_right,
-    skybox_left,
-    skybox_top,
-    skybox_bottom,
-    skybox_front,
-    skybox_back
-  ]
-}))
+// scene.setSkybox(new Skybox({
+//   images: [
+//     skybox_right,
+//     skybox_left,
+//     skybox_top,
+//     skybox_bottom,
+//     skybox_front,
+//     skybox_back
+//   ]
+// }))
 
 // scene.setPostProcess(new Inversion())
 // scene.setPostProcess(new Kernel())
@@ -112,6 +113,37 @@ cubePositions.forEach((item, i) => {
 
   scene.addMesh(cube)
 })
+
+function rand() {
+  return parseInt(Math.random() * 10000000)
+}
+
+const cubeGroup = []
+const amount = 1000
+const radius = 150.0
+const offset = 25.0
+for (let i = 0; i < amount; i++) {
+  const cube = new Cube()
+  cube.setMaterial(mat1)
+  let angle = i / amount * 360;
+  let displacement = (rand() % parseInt(2 * offset * 100)) / 100.0 - offset
+  let x = Math.sin(angle) * radius + displacement;
+  displacement = (rand() % parseInt(2 * offset * 100)) / 100.0 - offset
+  let y = displacement * 0.4
+  displacement = (rand() % parseInt(2 * offset * 100)) / 100.0 - offset
+  let z = Math.cos(angle) * radius + displacement;
+  cube.translate([x, y, z])
+
+  let scale = (rand() % 20) / 100.0 + 0.05
+  cube.scale([scale, scale, scale])
+
+  let rotAngle = rand() % 360
+  cube.rotate(rotAngle, [0.4, 0.6, 0.8])
+
+  cubeGroup.push(cube)
+}
+
+scene.addMeshGroup(new MeshGroup(cubeGroup))
 
 const plane = new Plane()
 plane.setMaterial(mat3)

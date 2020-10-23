@@ -97,7 +97,7 @@ export default class Material {
   }
 
 
-  render() {
+  render(options = {}) {
     const gl = window.gl
     const cam = window.scene.mainCamera
     const transform = toArray(this.mesh.transform)
@@ -118,7 +118,12 @@ export default class Material {
     gl.uniformMatrix4fv(mat4View, false, view)
     gl.uniform3fv(camPosition, cam.Position)
     // draw
-    gl.drawArrays(gl.TRIANGLES, 0, this.mesh.vertex.length / 3);
+    if(options.count) {
+      gl.drawElementsInstanced(gl.TRIANGLES, options.count, gl.UNSIGNED_SHORT, 0, options.count)
+      // gl.drawArraysInstanced(gl.TRIANGLES, 0, this.mesh.vertex.length / 3, options.count);
+    } else {
+      gl.drawArrays(gl.TRIANGLES, 0, this.mesh.vertex.length / 3);
+    }
     gl.bindVertexArray(null)
   }
 }

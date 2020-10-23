@@ -5,6 +5,7 @@ export default class Scene {
 
     this.mainCamera = null
     this.meshs = []
+    this.meshGroups = []
     this.skybox = null
     this.lights = {
       sky: [],
@@ -31,6 +32,10 @@ export default class Scene {
 
   addMesh(o) {
     this.meshs.push(o);
+  }
+
+  addMeshGroup(o) {
+    this.meshGroups.push(o)
   }
 
   addLight(l) {
@@ -61,6 +66,17 @@ export default class Scene {
         continue
       }
       this.meshs[i] && this.meshs[i]._update();
+    }
+    for(let i = 0, l = this.meshGroups.length; i < l; i++) {
+      if(this.meshGroups[i].canDestroy) {
+        delete this.meshGroups[i]
+        this.meshGroups.splice(i, 1)
+        i--;l--;
+        continue
+      }
+      this.meshGroups[i] && this.meshGroups[i]._update();
+    }
+    if(this.skybox) {
       this.skybox.render()
     }
     if(this.postprocess) {
