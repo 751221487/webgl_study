@@ -19,8 +19,17 @@ import MHighlight from './materials/highlight'
 import Inversion from './postprocess/inversion'
 import Kernel from './postprocess/kernel'
 
+import Skybox from './core/skybox'
+
 import pic from '../assets/imgs/awesomeface.png'
 import woodFloor from '../assets/imgs/wood-floor.jpg'
+
+import skybox_right from '../assets/imgs/skybox/right.jpg'
+import skybox_left from '../assets/imgs/skybox/left.jpg'
+import skybox_top from '../assets/imgs/skybox/top.jpg'
+import skybox_bottom from '../assets/imgs/skybox/bottom.jpg'
+import skybox_front from '../assets/imgs/skybox/front.jpg'
+import skybox_back from '../assets/imgs/skybox/back.jpg'
 
 var canvas = document.getElementById("canvas");
 var gl = canvas.getContext("webgl2", { stencil: true });
@@ -48,6 +57,17 @@ scene.addLight(new DirectLight({
 scene.addLight(new PointLight({
   color: [1, 1, 1],
   position: [0.5, -0.5, 0.5]
+}))
+
+scene.setSkybox(new Skybox({
+  images: [
+    skybox_right,
+    skybox_left,
+    skybox_top,
+    skybox_bottom,
+    skybox_front,
+    skybox_back
+  ]
 }))
 
 // scene.setPostProcess(new Inversion())

@@ -5,6 +5,7 @@ export default class Scene {
 
     this.mainCamera = null
     this.meshs = []
+    this.skybox = null
     this.lights = {
       sky: [],
       direct: [],
@@ -22,6 +23,10 @@ export default class Scene {
 
   setPostProcess(postprocess) {
     this.postprocess = postprocess
+  }
+
+  setSkybox(skybox) {
+    this.skybox = skybox
   }
 
   addMesh(o) {
@@ -48,7 +53,6 @@ export default class Scene {
     gl.clearColor(0, 0, 0, 1)
     gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT | gl.STENCIL_BUFFER_BIT)
     this.mainCamera._update()
-
     for(let i = 0, l = this.meshs.length; i < l; i++) {
       if(this.meshs[i].canDestroy) {
         delete this.meshs[i]
@@ -57,6 +61,7 @@ export default class Scene {
         continue
       }
       this.meshs[i] && this.meshs[i]._update();
+      this.skybox.render()
     }
     if(this.postprocess) {
       this.postprocess.render()
