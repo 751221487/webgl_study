@@ -1,3 +1,4 @@
+import { toArray } from '../utils/Matrix'
 export default class MeshGroup {
   
   constructor(meshs) {
@@ -8,6 +9,16 @@ export default class MeshGroup {
     this._time++
     this.update && this.update()
     this._render()
+  }
+
+  setMaterial(mat) {
+    let instanceMat = []
+    for(var i = 0; i < this.meshs.length; i++) {
+      instanceMat = instanceMat.concat(toArray(this.meshs[i].transform))
+    }
+    this.meshs[0].setMaterial(mat, {
+      instanceMat,
+    })
   }
 
   setHighlight() {
@@ -35,24 +46,21 @@ export default class MeshGroup {
   }
 
   _render() {
-    for(let i = 0; i < this.meshs.length; i++) {
-       let mesh = this.meshs[i]
+     let mesh = this.meshs[0]
 
-       if(mesh.material) {
-        if(mesh.highlightMat) {
-          gl.stencilFunc(gl.ALWAYS, 1, 0xFF)
-          gl.stencilMask(0xFF)
-        } else {
-          gl.stencilMask(0)
-        }
-        mesh.material.mesh = mesh
-        mesh.material.render({count: this.meshs.length})
-      }
+     if(mesh.material) {
       if(mesh.highlightMat) {
-        mesh.renderHighlight({count: this.meshs.length})
+        gl.stencilFunc(gl.ALWAYS, 1, 0xFF)
+        gl.stencilMask(0xFF)
+      } else {
+        gl.stencilMask(0)
       }
+      mesh.material.mesh = mesh
+      mesh.material.render({count: this.meshs.length})
     }
-
+    if(mesh.highlightMat) {
+      mesh.renderHighlight({count: this.meshs.length})
+    }
   }
 
 }

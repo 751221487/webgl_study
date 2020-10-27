@@ -1,11 +1,12 @@
 import Material from '../core/material'
 import vertexShader from '../shaders/vertex.glsl'
+import vertexInstanceShader from '../shaders/vertex_instance.glsl'
 
 export default class MPhong extends Material {
   constructor(options = { diffuse, specular }) {
     super()
     this.options = options
-    this.vertexShader = vertexShader
+    this.vertexShader = options.instance ? vertexInstanceShader : vertexShader
     this.fragmentShader = this.fragmentShader()
     this.initProgram()
     this.initImage()

@@ -4,7 +4,7 @@ import { numberMultiple, castTo } from '../utils/Vector'
 import vertexShader from '../shaders/vertex.glsl'
 import fragmentShader from '../shaders/fragment.glsl'
 
-import MHighlight from '../materials/highlight'
+import MSingleColor from '../materials/singleColor'
 
 export default class Mesh {
   constructor(data, options = {}) {
@@ -47,14 +47,14 @@ export default class Mesh {
     this.transform = multiple(multiple(this.rotation, this.scaling), this.translation)
   }
 
-  setMaterial(mat) {
+  setMaterial(mat, options) {
     this.material = mat
     mat.mesh = this
-    mat.init()
+    mat.init(options)
   }
 
   setHighlight() {
-    this.highlightMat = new MHighlight({
+    this.highlightMat = new MSingleColor({
       color: [1, 1, 1]
     })
     this.highlightMat.mesh = this

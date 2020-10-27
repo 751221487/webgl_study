@@ -14,15 +14,15 @@ export default class Material {
     this.glProgram = program
   }
 
-  init() {
+  init(options = {}) {
     gl.bindVertexArray(this.vao)
     gl.useProgram(this.glProgram)
-    this.bindAttrLocation()
+    this.bindAttrLocation(options)
     this.bindUniform()
     gl.bindVertexArray(null)
   }
 
-  bindAttrLocation() {
+  bindAttrLocation(options) {
     const gl = window.gl
     const program = this.glProgram
 
@@ -49,6 +49,29 @@ export default class Material {
     gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(normal), gl.STATIC_DRAW)
     gl.enableVertexAttribArray(aNormal);
     gl.vertexAttribPointer(aNormal, 3, gl.FLOAT, false, 0, 0)
+
+    if(options.instanceMat) {
+      const aInstanceMatrix = gl.getAttribLocation(program, "aInstanceMatrix")
+      const instanceBuffer = gl.createBuffer()
+      gl.bindBuffer(gl.ARRAY_BUFFER, instanceBuffer);
+      gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(options.instanceMat), gl.STATIC_DRAW)
+      gl.enableVertexAttribArray(aInstanceMatrix)
+      gl.vertexAttribPointer(aInstanceMatrix, 4, gl.FLOAT, false, 64, 0)
+
+      gl.enableVertexAttribArray(aInstanceMatrix + 1)
+      gl.vertexAttribPointer(aInstanceMatrix, 4, gl.FLOAT, false, 64, 16)
+
+      gl.enableVertexAttribArray(aInstanceMatrix + 2)
+      gl.vertexAttribPointer(aInstanceMatrix, 4, gl.FLOAT, false, 64, 32)
+
+      gl.enableVertexAttribArray(aInstanceMatrix + 3)
+      gl.vertexAttribPointer(aInstanceMatrix, 4, gl.FLOAT, false, 64, 48)
+
+      gl.vertexAttribDivisor(aInstanceMatrix, 1)
+      gl.vertexAttribDivisor(aInstanceMatrix + 1, 1)
+      gl.vertexAttribDivisor(aInstanceMatrix + 2, 1)
+      gl.vertexAttribDivisor(aInstanceMatrix + 3, 1)
+    }
 
   }
 
@@ -119,7 +142,7 @@ export default class Material {
     gl.uniform3fv(camPosition, cam.Position)
     // draw
     if(options.count) {
-      gl.drawElementsInstanced(gl.TRIANGLES, options.count, gl.UNSIGNED_SHORT, 0, options.count)
+      gl.drawElementsInstanced(gl.TRIANGLES, this.mesh.vertex.length / 3, gl.UNSIGNED_SHORT, 0, options.count)
       // gl.drawArraysInstanced(gl.TRIANGLES, 0, this.mesh.vertex.length / 3, options.count);
     } else {
       gl.drawArrays(gl.TRIANGLES, 0, this.mesh.vertex.length / 3);

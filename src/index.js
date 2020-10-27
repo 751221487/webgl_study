@@ -15,7 +15,6 @@ import DirectLight from './light/directLight'
 import PointLight from './light/pointLight'
 
 import MPhong from './materials/phong'
-import MHighlight from './materials/highlight'
 
 import Inversion from './postprocess/inversion'
 import Kernel from './postprocess/kernel'
@@ -118,32 +117,41 @@ function rand() {
   return parseInt(Math.random() * 10000000)
 }
 
-const cubeGroup = []
+const c = new Cube()
+c.translate([1.0, 0, 0])
+
+const cubeGroup = [c]
 const amount = 1000
-const radius = 150.0
+const radius = 50.0
 const offset = 25.0
-for (let i = 0; i < amount; i++) {
-  const cube = new Cube()
-  cube.setMaterial(mat1)
-  let angle = i / amount * 360;
-  let displacement = (rand() % parseInt(2 * offset * 100)) / 100.0 - offset
-  let x = Math.sin(angle) * radius + displacement;
-  displacement = (rand() % parseInt(2 * offset * 100)) / 100.0 - offset
-  let y = displacement * 0.4
-  displacement = (rand() % parseInt(2 * offset * 100)) / 100.0 - offset
-  let z = Math.cos(angle) * radius + displacement;
-  cube.translate([x, y, z])
+// for (let i = 0; i < amount; i++) {
+//   const cube = new Cube()
+//   let angle = i / amount * 360;
+//   let displacement = (rand() % parseInt(2 * offset * 100)) / 100.0 - offset
+//   let x = Math.sin(angle) * radius + displacement;
+//   displacement = (rand() % parseInt(2 * offset * 100)) / 100.0 - offset
+//   let y = displacement * 0.4
+//   displacement = (rand() % parseInt(2 * offset * 100)) / 100.0 - offset
+//   let z = Math.cos(angle) * radius + displacement;
+//   cube.translate([x, y, z])
 
-  let scale = (rand() % 20) / 100.0 + 0.05
-  cube.scale([scale, scale, scale])
+//   let scale = (rand() % 20) / 100.0 + 0.05
+//   cube.scale([scale, scale, scale])
 
-  let rotAngle = rand() % 360
-  cube.rotate(rotAngle, [0.4, 0.6, 0.8])
+//   let rotAngle = rand() % 360
+//   cube.rotate(rotAngle, [0.4, 0.6, 0.8])
 
-  cubeGroup.push(cube)
-}
+//   cubeGroup.push(cube)
+// }
 
-scene.addMeshGroup(new MeshGroup(cubeGroup))
+const meshGroup = new MeshGroup(cubeGroup)
+meshGroup.setMaterial(new MPhong({
+  diffuse: [1, 0, 0],
+  specular: [1, 1, 1],
+  instance: true
+}))
+
+scene.addMeshGroup(meshGroup)
 
 const plane = new Plane()
 plane.setMaterial(mat3)
