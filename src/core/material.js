@@ -59,13 +59,13 @@ export default class Material {
       gl.vertexAttribPointer(aInstanceMatrix, 4, gl.FLOAT, false, 64, 0)
 
       gl.enableVertexAttribArray(aInstanceMatrix + 1)
-      gl.vertexAttribPointer(aInstanceMatrix, 4, gl.FLOAT, false, 64, 16)
+      gl.vertexAttribPointer(aInstanceMatrix + 1, 4, gl.FLOAT, false, 64, 16)
 
       gl.enableVertexAttribArray(aInstanceMatrix + 2)
-      gl.vertexAttribPointer(aInstanceMatrix, 4, gl.FLOAT, false, 64, 32)
+      gl.vertexAttribPointer(aInstanceMatrix + 2, 4, gl.FLOAT, false, 64, 32)
 
       gl.enableVertexAttribArray(aInstanceMatrix + 3)
-      gl.vertexAttribPointer(aInstanceMatrix, 4, gl.FLOAT, false, 64, 48)
+      gl.vertexAttribPointer(aInstanceMatrix + 3, 4, gl.FLOAT, false, 64, 48)
 
       gl.vertexAttribDivisor(aInstanceMatrix, 1)
       gl.vertexAttribDivisor(aInstanceMatrix + 1, 1)
@@ -142,8 +142,7 @@ export default class Material {
     gl.uniform3fv(camPosition, cam.Position)
     // draw
     if(options.count) {
-      gl.drawElementsInstanced(gl.TRIANGLES, this.mesh.vertex.length / 3, gl.UNSIGNED_SHORT, 0, options.count)
-      // gl.drawArraysInstanced(gl.TRIANGLES, 0, this.mesh.vertex.length / 3, options.count);
+      gl.drawArraysInstanced(gl.TRIANGLES, 0, this.mesh.vertex.length / 3, options.count)
     } else {
       gl.drawArrays(gl.TRIANGLES, 0, this.mesh.vertex.length / 3);
     }

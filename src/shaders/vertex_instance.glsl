@@ -5,6 +5,7 @@ in vec3 aNormal;
 in vec2 aTexCoord;
 in mat4 aInstanceMatrix;
 
+uniform mat4 m_model;
 uniform mat4 m_view;
 uniform mat4 m_projection;
 

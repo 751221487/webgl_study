@@ -12,12 +12,12 @@ export default class MeshGroup {
   }
 
   setMaterial(mat) {
-    let instanceMat = []
+    let instanceMat = [], transform = []
     for(var i = 0; i < this.meshs.length; i++) {
       instanceMat = instanceMat.concat(toArray(this.meshs[i].transform))
     }
     this.meshs[0].setMaterial(mat, {
-      instanceMat,
+      instanceMat
     })
   }
 
@@ -46,21 +46,22 @@ export default class MeshGroup {
   }
 
   _render() {
-     let mesh = this.meshs[0]
+    let mesh = this.meshs[0]
 
-     if(mesh.material) {
-      if(mesh.highlightMat) {
+    if (mesh.material) {
+      if (mesh.highlightMat) {
         gl.stencilFunc(gl.ALWAYS, 1, 0xFF)
         gl.stencilMask(0xFF)
       } else {
         gl.stencilMask(0)
       }
       mesh.material.mesh = mesh
-      mesh.material.render({count: this.meshs.length})
+      mesh.material.render({ count: this.meshs.length })
     }
-    if(mesh.highlightMat) {
-      mesh.renderHighlight({count: this.meshs.length})
+    if (mesh.highlightMat) {
+      mesh.renderHighlight({ count: this.meshs.length })
     }
+
   }
 
 }
