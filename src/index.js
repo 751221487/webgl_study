@@ -46,29 +46,29 @@ scene.addLight(new SkyLight({
   color: [0.2, 0.2, 0.2]
 }))
 scene.addLight(new DirectLight({
-  color: [0.2, 0.4, 0.6],
-  direction: [0, 1, -1]
+  color: [0.8, 0.8, 0.8],
+  direction: [1, -1, 2]
 }))
 scene.addLight(new DirectLight({
   color: [0, 1, 1],
   direction: [1, 0, 0]
 }))
 
-scene.addLight(new PointLight({
-  color: [1, 1, 1],
-  position: [0.5, -0.5, 0.5]
-}))
+// scene.addLight(new PointLight({
+//   color: [1, 1, 1],
+//   position: [0.5, -0.5, 0.5]
+// }))
 
-scene.setSkybox(new Skybox({
-  images: [
-    skybox_right,
-    skybox_left,
-    skybox_top,
-    skybox_bottom,
-    skybox_front,
-    skybox_back
-  ]
-}))
+// scene.setSkybox(new Skybox({
+//   images: [
+//     skybox_right,
+//     skybox_left,
+//     skybox_top,
+//     skybox_bottom,
+//     skybox_front,
+//     skybox_back
+//   ]
+// }))
 
 // scene.setPostProcess(new Inversion())
 // scene.setPostProcess(new Kernel())
@@ -95,23 +95,23 @@ const cubePositions = [
   [-1.3,  1.0, -1.5]
 ]
 
-cubePositions.forEach((item, i) => {
-  const cube = new Cube()
+// cubePositions.forEach((item, i) => {
+//   const cube = new Cube()
 
-  if(i === 3) {
-    cube.setHighlight()
-    cube.update = () => {
-      cube.rotate(angle2Radian(2 * cube._time), [0, 1, 0])
-    }
-  }
+//   if(i === 3) {
+//     cube.setHighlight()
+//     cube.update = () => {
+//       cube.rotate(angle2Radian(2 * cube._time), [0, 1, 0])
+//     }
+//   }
 
-  cube.setMaterial(i % 2 === 0 ? mat2 : mat1)
-  cube.scale([0.5, 0.5, 0.5])
-  cube.rotate(angle2Radian(20 * i), [1.0, 0.3, 0.5])
-  cube.translate(item)
+//   cube.setMaterial(i % 2 === 0 ? mat2 : mat1)
+//   cube.scale([0.5, 0.5, 0.5])
+//   cube.rotate(angle2Radian(20 * i), [1.0, 0.3, 0.5])
+//   cube.translate(item)
 
-  scene.addMesh(cube)
-})
+//   scene.addMesh(cube)
+// })
 
 function rand() {
   return parseInt(Math.random() * 10000000)
@@ -155,7 +155,7 @@ scene.addMeshGroup(meshGroup)
 const plane = new Plane()
 plane.setMaterial(mat3)
 plane.translate([0, -1, 0])
-plane.scale([2, 2, 2])
+plane.scale([5, 5, 5])
 scene.addMesh(plane)
 
 scene.start()

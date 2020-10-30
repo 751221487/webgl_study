@@ -21,7 +21,7 @@ export default class Camera {
 
   setScene(scene) {
     this.scene = scene
-    this.projection = projection(45, 4 / 3, 0.1, 100)
+    this.projection = projection(45, 4 / 3, 0.1, 1000)
   }
 
   getViewMatrix() {
