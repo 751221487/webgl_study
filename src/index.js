@@ -2,7 +2,8 @@ import './utils/webgl-utils.js'
 import vertexShader from './shaders/vertex.glsl'
 import fragmentShader from './shaders/fragment.glsl'
 
-import { angle2Radian } from './utils/Math.js'
+import { angle2Radian } from './utils/Math'
+import { perspective } from './utils/Matrix'
 
 import Scene from './core/scene'
 import Camera from './core/camera'
@@ -34,12 +35,12 @@ import skybox_back from '../assets/imgs/skybox/back.jpg'
 var canvas = document.getElementById("canvas");
 var gl = canvas.getContext("webgl2", { stencil: true });
 window.gl = gl
-gl.enable(gl.DEPTH_TEST)
 
 const scene = new Scene()
 window.scene = scene
 
 const cam = new Camera()
+cam.projection = perspective(45, 4 / 3, 0.1, 1000)
 scene.setMainCamera(cam)
 
 scene.addLight(new SkyLight({

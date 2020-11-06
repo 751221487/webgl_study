@@ -127,7 +127,7 @@ export const lookAt = (eye, front, up) => {
 }
 
 
-export const projection = (angle, rate, near, far) => {
+export const perspective = (angle, rate, near, far) => {
   angle = Math.PI * angle / 180
   let tanHalfFovy = Math.tan(angle / 2)
   let res = zero(4, 4)
@@ -138,6 +138,17 @@ export const projection = (angle, rate, near, far) => {
   res[2][2] = - (far + near) / (far - near);
   res[3][2] = - (2 * far * near) / (far - near);
   return res
+}
+
+export const ortho = (left, right, bottom, top, near, far) => {
+  let res = unit(4)
+  res[0][0] = 2 / (right - left)
+  res[1][1] = 2 / (top - bottom)
+  res[3][0] = - (right + left) / (right - left)
+  res[3][1] = - (top + bottom) / (top - bottom)
+  res[2][2] = - 2 / (far - near)
+  res[3][2] = - (far + near) / (far - near)
+  return res;
 }
 
 export const toArray = mat => {

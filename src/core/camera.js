@@ -1,6 +1,6 @@
 import { angle2Radian } from '../utils/Math'
 import { cross, normalize, add, numberMultiple } from '../utils/Vector'
-import { lookAt, projection } from '../utils/Matrix'
+import { lookAt } from '../utils/Matrix'
 import Control from './control'
 
 export default class Camera {
@@ -21,7 +21,6 @@ export default class Camera {
 
   setScene(scene) {
     this.scene = scene
-    this.projection = projection(45, 4 / 3, 0.1, 1000)
   }
 
   getViewMatrix() {

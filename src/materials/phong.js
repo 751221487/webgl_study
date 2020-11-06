@@ -31,11 +31,9 @@ export default class MPhong extends Material {
           DirectLight light = directLights[i];
           vec3 lightDir = normalize(-light.direction);
           vec3 viewDir = normalize(viewPos - FragPos);
-          // vec3 reflectDir = reflect(-lightDir, norm);
-          // float spec = pow(max(dot(viewDir, reflectDir), 0.0), 64.0);
 
           vec3 halfwayDir = normalize(lightDir + viewDir);
-          float spec = pow(max(dot(norm, -halfwayDir), 0.0), 64.0);
+          float spec = pow(max(dot(norm, -halfwayDir), 0.0), 32.0);
 
           result += spec * light.color * ${specularColor};
       }
@@ -57,11 +55,9 @@ export default class MPhong extends Material {
           PointLight light = pointLights[i];
           vec3 lightDir = normalize(FragPos - light.position);
           vec3 viewDir = normalize(viewPos - FragPos);
-          // vec3 reflectDir = reflect(-lightDir, norm);
-          // float spec = pow(max(dot(viewDir, reflectDir), 0.0), 64.0);
           
           vec3 halfwayDir = normalize(lightDir + viewDir);
-          float spec = pow(max(dot(norm, -halfwayDir), 0.0), 64.0);
+          float spec = pow(max(dot(norm, -halfwayDir), 0.0), 32.0);
 
           float distance = length(light.position - FragPos);
           float attenuation = 1.0 / (light.constant + light.linear * distance + light.quadratic * (distance * distance));
