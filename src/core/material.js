@@ -119,6 +119,15 @@ export default class Material {
     return image
   }
 
+  renderShadow(options) {
+    const lights = window.scene.lights
+    lights.direct[0].renderShadow()
+    if(options.count) {
+      gl.drawArraysInstanced(gl.TRIANGLES, 0, this.mesh.vertex.length / 3, options.count)
+    } else {
+      gl.drawArrays(gl.TRIANGLES, 0, this.mesh.vertex.length / 3);
+    }
+  }
 
   render(options = {}) {
     const gl = window.gl
@@ -140,6 +149,7 @@ export default class Material {
     gl.uniformMatrix4fv(mat4Model, false, transform)
     gl.uniformMatrix4fv(mat4View, false, view)
     gl.uniform3fv(camPosition, cam.Position)
+    this.renderShadow(options)
     // draw
     if(options.count) {
       gl.drawArraysInstanced(gl.TRIANGLES, 0, this.mesh.vertex.length / 3, options.count)

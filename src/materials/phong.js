@@ -154,7 +154,7 @@ export default class MPhong extends Material {
   bindUniform() {
     super.bindUniform()
     const { diffuse, specular } = this.options
-    const lights = window.scene.lights 
+    const lights = window.scene.lights
     const gl = window.gl
 
     for(let i = 0; i < lights.sky.length; i++) {
