@@ -122,11 +122,13 @@ export default class Material {
   renderShadow(options) {
     const lights = window.scene.lights
     lights.direct[0].renderShadow()
+    gl.bindFramebuffer(gl.FRAMEBUFFER, lights.direct[0].depthMapFBO)
     if(options.count) {
       gl.drawArraysInstanced(gl.TRIANGLES, 0, this.mesh.vertex.length / 3, options.count)
     } else {
       gl.drawArrays(gl.TRIANGLES, 0, this.mesh.vertex.length / 3);
     }
+    gl.bindFramebuffer(gl.FRAMEBUFFER, null)
   }
 
   render(options = {}) {
@@ -151,6 +153,15 @@ export default class Material {
     gl.uniform3fv(camPosition, cam.Position)
     this.renderShadow(options)
     // draw
+    const nearPlaneLocation = gl.getUniformLocation(this.glProgram, "near_plane")
+    gl.uniform1f(nearPlaneLocation, false, 1.0)
+
+    const farPlaneLocation = gl.getUniformLocation(this.glProgram, "far_plane")
+    gl.uniform1f(farPlaneLocation, false, 7.5)
+
+    gl.activeTexture(gl.TEXTURE0);
+    const lights = window.scene.lights
+    gl.bindTexture(gl.TEXTURE_2D, lights.direct[0].depthMap);
     if(options.count) {
       gl.drawArraysInstanced(gl.TRIANGLES, 0, this.mesh.vertex.length / 3, options.count)
     } else {

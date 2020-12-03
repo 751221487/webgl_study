@@ -1,13 +1,14 @@
 import Material from '../core/material'
 import vertexShader from '../shaders/vertex.glsl'
 import vertexInstanceShader from '../shaders/vertex_instance.glsl'
+import shadowDebugShader from '../shaders/shadow/shadow_debug.glsl'
 
 export default class MPhong extends Material {
   constructor(options = { diffuse, specular }) {
     super()
     this.options = options
     this.vertexShader = options.instance ? vertexInstanceShader : vertexShader
-    this.fragmentShader = this.fragmentShader()
+    this.fragmentShader = shadowDebugShader //this.fragmentShader()
     this.initProgram()
     this.initImage()
   }
@@ -137,42 +138,42 @@ export default class MPhong extends Material {
   }
 
   initImage() {
-    const { diffuse, specular } = this.options
-    if(diffuse instanceof Array) {
-      gl.uniform3fv(gl.getUniformLocation(this.glProgram, "c_diffuse"), diffuse)
-    } else {
-      this.loadImage(diffuse)
-    }
+    // const { diffuse, specular } = this.options
+    // if(diffuse instanceof Array) {
+    //   gl.uniform3fv(gl.getUniformLocation(this.glProgram, "c_diffuse"), diffuse)
+    // } else {
+    //   this.loadImage(diffuse)
+    // }
 
-    if(specular instanceof Array) {
-      gl.uniform3fv(gl.getUniformLocation(this.glProgram, "c_specular"), specular)
-    } else {
-      this.loadImage(specular)
-    }
+    // if(specular instanceof Array) {
+    //   gl.uniform3fv(gl.getUniformLocation(this.glProgram, "c_specular"), specular)
+    // } else {
+    //   this.loadImage(specular)
+    // }
   }
 
   bindUniform() {
     super.bindUniform()
-    const { diffuse, specular } = this.options
-    const lights = window.scene.lights
-    const gl = window.gl
+    // const { diffuse, specular } = this.options
+    // const lights = window.scene.lights
+    // const gl = window.gl
 
-    for(let i = 0; i < lights.sky.length; i++) {
-      gl.uniform3fv(gl.getUniformLocation(this.glProgram, `skyLights[${i}]`), lights.sky[i].color)
-    }
+    // for(let i = 0; i < lights.sky.length; i++) {
+    //   gl.uniform3fv(gl.getUniformLocation(this.glProgram, `skyLights[${i}]`), lights.sky[i].color)
+    // }
 
-    for(let i = 0; i < lights.direct.length; i++) {
-      gl.uniform3fv(gl.getUniformLocation(this.glProgram, `directLights[${i}].direction`), lights.direct[i].direction)
-      gl.uniform3fv(gl.getUniformLocation(this.glProgram, `directLights[${i}].color`), lights.direct[i].color)
-    }
+    // for(let i = 0; i < lights.direct.length; i++) {
+    //   gl.uniform3fv(gl.getUniformLocation(this.glProgram, `directLights[${i}].direction`), lights.direct[i].direction)
+    //   gl.uniform3fv(gl.getUniformLocation(this.glProgram, `directLights[${i}].color`), lights.direct[i].color)
+    // }
 
-    for(let i = 0; i < lights.point.length; i++) {
-      gl.uniform3fv(gl.getUniformLocation(this.glProgram, `pointLights[${i}].position`), lights.point[i].position)
-      gl.uniform3fv(gl.getUniformLocation(this.glProgram, `pointLights[${i}].color`), lights.point[i].color)
-      gl.uniform1f(gl.getUniformLocation(this.glProgram, `pointLights[${i}].constant`), lights.point[i].constant)
-      gl.uniform1f(gl.getUniformLocation(this.glProgram, `pointLights[${i}].linear`), lights.point[i].linear)
-      gl.uniform1f(gl.getUniformLocation(this.glProgram, `pointLights[${i}].quadratic`), lights.point[i].quadratic)
-    }
+    // for(let i = 0; i < lights.point.length; i++) {
+    //   gl.uniform3fv(gl.getUniformLocation(this.glProgram, `pointLights[${i}].position`), lights.point[i].position)
+    //   gl.uniform3fv(gl.getUniformLocation(this.glProgram, `pointLights[${i}].color`), lights.point[i].color)
+    //   gl.uniform1f(gl.getUniformLocation(this.glProgram, `pointLights[${i}].constant`), lights.point[i].constant)
+    //   gl.uniform1f(gl.getUniformLocation(this.glProgram, `pointLights[${i}].linear`), lights.point[i].linear)
+    //   gl.uniform1f(gl.getUniformLocation(this.glProgram, `pointLights[${i}].quadratic`), lights.point[i].quadratic)
+    // }
   }
 
 }

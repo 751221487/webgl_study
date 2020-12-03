@@ -102,8 +102,5 @@ export default class PostProcess {
 
     gl.bindFramebuffer(gl.FRAMEBUFFER, this.frameBuffer)
     gl.enable(gl.DEPTH_TEST)
-
-    gl.bindFramebuffer(gl.FRAMEBUFFER, this.frameBuffer)
-    gl.enable(gl.DEPTH_TEST)
   }
 }

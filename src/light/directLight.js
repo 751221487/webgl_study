@@ -10,6 +10,8 @@ export default class DirectLight extends Light {
     this.type = 'direct'
     this.vertexShader = vertexShader
     this.fragmentShader = fragmentShader
+    this.depthMapFBO = null
+    this.depthMap = null
     this.initProgram()
   }
 
@@ -23,18 +25,19 @@ export default class DirectLight extends Light {
 
   bindBuffer() {
     const SHADOW_WIDTH = 1024, SHADOW_HEIGHT = 1024
-    const depthMapFBO = gl.createFramebuffer()
-    const depthMap = gl.createTexture()
+    this.depthMapFBO = gl.createFramebuffer()
+    this.depthMap = gl.createTexture()
 
-    gl.bindTexture(gl.TEXTURE_2D, depthMap)
+    gl.bindTexture(gl.TEXTURE_2D, this.depthMap)
     gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.NEAREST)
     gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.NEAREST)
     gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.REPEAT)
     gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.REPEAT)
-    gl.texImage2D(gl.TEXTURE_2D, 0, gl.DEPTH_COMPONENT, SHADOW_WIDTH, SHADOW_HEIGHT, 0, gl.DEPTH_COMPONENT, gl.FLOAT, 0)
+    gl.texImage2D(gl.TEXTURE_2D, 0, gl.DEPTH_COMPONENT, SHADOW_WIDTH, SHADOW_HEIGHT, 0, gl.DEPTH_COMPONENT, gl.FLOAT, null)
+    // gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, SHADOW_WIDTH,  SHADOW_HEIGHT, 0, gl.RGBA, gl.UNSIGNED_BYTE, null)
 
-    gl.bindFramebuffer(gl.FRAMEBUFFER, depthMapFBO)
-    gl.framebufferTexture2D(gl.FRAMEBUFFER, gl.DEPTH_ATTACHMENT, gl.TEXTURE_2D, depthMap, 0)
+    gl.bindFramebuffer(gl.FRAMEBUFFER, this.depthMapFBO)
+    gl.framebufferTexture2D(gl.FRAMEBUFFER, gl.DEPTH_ATTACHMENT, gl.TEXTURE_2D, this.depthMap, 0)
     gl.bindFramebuffer(gl.FRAMEBUFFER, null)
   }
 
