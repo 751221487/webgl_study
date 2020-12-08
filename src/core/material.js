@@ -1,11 +1,12 @@
 import { toArray } from '../utils/Matrix'
-
+import Shadow from './shadow'
 export default class Material {
   constructor() {
     this.mesh = {}
     this.textures = []
     this.textureIndex = 0
     this.vao = gl.createVertexArray()
+    this.shadow = new Shadow(this)
   }
 
   initProgram() {
@@ -119,24 +120,13 @@ export default class Material {
     return image
   }
 
-  renderShadow(options) {
-    const lights = window.scene.lights
-    lights.direct[0].renderShadow()
-    gl.bindFramebuffer(gl.FRAMEBUFFER, lights.direct[0].depthMapFBO)
-    if(options.count) {
-      gl.drawArraysInstanced(gl.TRIANGLES, 0, this.mesh.vertex.length / 3, options.count)
-    } else {
-      gl.drawArrays(gl.TRIANGLES, 0, this.mesh.vertex.length / 3);
-    }
-    gl.bindFramebuffer(gl.FRAMEBUFFER, null)
-  }
-
   render(options = {}) {
+    this.shadow.render(options)
+    return
     const gl = window.gl
     const cam = window.scene.mainCamera
     const transform = toArray(this.mesh.transform)
     const view = toArray(cam.getViewMatrix())
-
     for(let i = 0; i < this.textures.length; i++) {
       gl.activeTexture(gl['TEXTURE' + i])
       gl.bindTexture(gl.TEXTURE_2D, this.textures[i])
@@ -151,17 +141,7 @@ export default class Material {
     gl.uniformMatrix4fv(mat4Model, false, transform)
     gl.uniformMatrix4fv(mat4View, false, view)
     gl.uniform3fv(camPosition, cam.Position)
-    this.renderShadow(options)
-    // draw
-    const nearPlaneLocation = gl.getUniformLocation(this.glProgram, "near_plane")
-    gl.uniform1f(nearPlaneLocation, false, 1.0)
 
-    const farPlaneLocation = gl.getUniformLocation(this.glProgram, "far_plane")
-    gl.uniform1f(farPlaneLocation, false, 7.5)
-
-    gl.activeTexture(gl.TEXTURE0);
-    const lights = window.scene.lights
-    gl.bindTexture(gl.TEXTURE_2D, lights.direct[0].depthMap);
     if(options.count) {
       gl.drawArraysInstanced(gl.TRIANGLES, 0, this.mesh.vertex.length / 3, options.count)
     } else {
@@ -169,4 +149,5 @@ export default class Material {
     }
     gl.bindVertexArray(null)
   }
+
 }
